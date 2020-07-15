@@ -26,7 +26,10 @@ function AdminHandler() {
 	}
 	  
 	return (
-		<Button variant="primary" onClick={() => exportData()}>Export data</Button>
+		<>
+			<Button variant="primary" onClick={() => exportData()}>Export data</Button>
+			<Button variant="primary" onClick={() => exportData()}>Generate CLI key</Button>
+		</>
 	);
 }
 

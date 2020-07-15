@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 let locationApi = require('./api.location');
 let fileApi = require('./api.file');
+let authApi = require('./api.auth');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api/location", locationApi);
 app.use("/api/file", fileApi);
+app.use("/api/auth", authApi);
 
 const mongo_uri = 'mongodb://localhost/hashman';
 mongoose.connect(mongo_uri, { useNewUrlParser: true }, function(err) {
@@ -33,4 +35,4 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 8082);

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
 
-function AddLocation(props) {
+function EditLocation(props) {
 	const [show, setShow] = useState(false);
-	const [newLocation, setNewLocation] = useState({ name: "", uri: "", description: ""});
+	const [location, setLocation] = useState({ name: "", uri: "", description: ""});
 	const [submitSuccess, setSubmitSuccess] = useState(null)
 
 	const handleClose = () => {
@@ -17,16 +17,27 @@ function AddLocation(props) {
 	
 	const handlePropertyChange = (prop, value) => {
 
-			let nl = Object.assign({}, newLocation);
+			let nl = Object.assign({}, location);
 			nl[prop] = value
 			
-			setNewLocation(nl);
+			setLocation(nl);
 	};
+
+	useEffect(() => {
+		console.log("Fetching data for edition")
+		fetch('http://localhost:8080/api/location/' + props.id)
+			.then(res => {
+				return res.json()
+			})
+			.then(data => {
+				setLocation(data)
+			})
+	}, [])
 	
 	const handleSubmit = () => {
-		fetch('http://localhost:8080/api/location/', {
-			method: 'POST',
-			body: JSON.stringify(newLocation),
+		fetch('http://localhost:8080/api/location/' + props.id, {
+			method: 'PUT',
+			body: JSON.stringify(location),
 			 headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
@@ -35,7 +46,7 @@ function AddLocation(props) {
 		.then(res => {
 		  if (res.status === 200) {
 			setSubmitSuccess(true);
-			setTimeout(() => { setShow(false); setNewLocation({ name: "", uri: "", description: ""}); setSubmitSuccess(null) }, 1500);
+			setTimeout(() => { setShow(false); setSubmitSuccess(null) }, 1500);
 			props.onSuccess();
 		  } else {
 			setSubmitSuccess(false);
@@ -50,29 +61,29 @@ function AddLocation(props) {
 	  
 	return (
 		<>
-			<Button variant="primary" onClick={handleShow}>
-				Add location
+			<Button variant="outline-primary" onClick={handleShow}>
+				Edit
 			</Button>
 			
 			<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
-			  <Modal.Title>Add location</Modal.Title>
+			  <Modal.Title>Edit location</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Form>
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label>Name</Form.Label>
-						<Form.Control type="text" placeholder="Enter name" value={newLocation.name} onChange={(e) => handlePropertyChange("name", e.target.value)} />
+						<Form.Control type="text" placeholder="Enter name" value={location.name} onChange={(e) => handlePropertyChange("name", e.target.value)} />
 					</Form.Group>
 					
 					<Form.Group controlId="formBasicEmz">
 						<Form.Label>URI</Form.Label>
-						<Form.Control type="text" placeholder="Enter URI" value={newLocation.uri} onChange={(e) => handlePropertyChange("uri", e.target.value)} />
+						<Form.Control type="text" placeholder="Enter URI" value={location.uri} onChange={(e) => handlePropertyChange("uri", e.target.value)} />
 					</Form.Group>
 					
 					<Form.Group controlId="exampleForm.ControlTextarea1">
 						<Form.Label>Description</Form.Label>
-						<Form.Control as="textarea" rows="3" value={newLocation.description} onChange={(e) => handlePropertyChange("description", e.target.value)}/>
+						<Form.Control as="textarea" rows="3" value={location.description} onChange={(e) => handlePropertyChange("description", e.target.value)}/>
 					  </Form.Group>
 				</Form>
 				
@@ -85,7 +96,7 @@ function AddLocation(props) {
 				Close
 			  </Button>
 			  <Button variant="primary" onClick={handleSubmit}>
-				Save
+				Save changes
 			  </Button>
 			</Modal.Footer>
 		  </Modal>
@@ -94,4 +105,4 @@ function AddLocation(props) {
 	);
 }
 
-export default AddLocation;
+export default EditLocation;

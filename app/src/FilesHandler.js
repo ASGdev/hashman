@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import CopiesHandler from './CopiesHandler'
+import NameFilter from './NameFilter'
 
 function Hashes(props){
 		console.log(props.data)
@@ -31,14 +32,19 @@ function Hashes(props){
 
 function FilesHandler() {
 	const [files, setFiles] = useState([]);
-	const [selectedFile, setSelectedFile] = useState({id: null, name: null});
+	const [refreshData, setRefreshData] = useState(true)
+	const [selectedFile, setSelectedFile] = useState({_id: null});
+	const [filterValue, setFilterValue] = useState(null)
+	const [allFiles, setAllFiles] = useState([])
 	
 	useEffect(() => {
-		fetchFiles()
+		if(refreshData){
+			fetchFiles()
+		}
 	}, [])
 	
-	const handleSelectCard = (id, name) => {
-		setSelectedFile({id, name});		
+	const handleSelectCard = (file) => {
+		setSelectedFile(file);		
 	}
 	
 	const fetchFiles = () => {
@@ -48,6 +54,7 @@ function FilesHandler() {
 		  })
 		  .then(data => {
 			  setFiles(data)
+			  setRefreshData(false)
 		  })
 	}
 	
@@ -62,7 +69,7 @@ function FilesHandler() {
 		})
 		.then(res => {
 		  if (res.status === 200) {
-			setSelectedFile({id: null, name: null});
+			setSelectedFile({ _id: null });
 			fetchFiles()
 		  } else {
 		  }
@@ -70,6 +77,18 @@ function FilesHandler() {
 		.catch(err => {
 			console.error("error : " + err);
 		});
+	}
+	
+	const handleNameFilterChange = (value) => {
+		console.log(value)
+		if(value === null){
+			setFilterValue(null)
+			setRefreshData(true)
+		} else if(value === "num"){
+			setFilterValue(new RegExp('^\d'))
+		} else {
+			setFilterValue(new RegExp('^' + value, 'i'))
+		}
 	}
 	  
 	return (
@@ -81,37 +100,39 @@ function FilesHandler() {
 				</Col>
 			</Row>
 
-			<Row>&nbsp;</Row>
+			<Row><Container className="d-flex flex-wrap"><NameFilter handleNameFilterChange={handleNameFilterChange} /></Container></Row>
 			
 			{ files.length === 0 ? <i>No files.</i> : <></> }
 			  <Row>
 				<Col>
 					<Container className="d-flex flex-wrap">
-							{ files.map(file => {
-								return (
-										<Card key={file._id} onClick={() => handleSelectCard(file._id, file.original.name)} className={file._id === selectedFile.id ? "border border-primary m-2 hoverable" : "m-2 hoverable"}>
-											<Card.Body>
-											  <Card.Title>{file.original.name}</Card.Title>
-											  <Card.Subtitle className="mb-2">
+						{files.map(file => {
+							if(filterValue === null || filterValue.test(file.original.name)){
+								return (	
+									<Card key={file._id} onClick={() => handleSelectCard(file)} className={file._id === selectedFile._id ? "border border-primary m-2 hoverable" : "m-2 hoverable"}>
+										<Card.Body>
+											<Card.Title>{file.original.name}</Card.Title>
+											<Card.Subtitle className="mb-2">
 												{new Date(file.original.creationDate).toUTCString()} &sdot; {file.original.location}
-											  </Card.Subtitle>
-											  <Card.Text>
+											</Card.Subtitle>
+											<Card.Text>
 												<Hashes data={file.original} />
-											  </Card.Text>
-											</Card.Body>
-											<Card.Footer className="text-muted">
-												<Button variant="outline-danger" onClick={(e) => handleDeleteFile(e, file._id)}>Delete</Button>
-											</Card.Footer>
-										</Card>
+											</Card.Text>
+										</Card.Body>
+										<Card.Footer className="text-muted">
+											<Button variant="outline-danger" onClick={(e) => handleDeleteFile(e, file._id)}>Delete</Button>
+										</Card.Footer>
+									</Card>
 								)
-							})
 							}
+						})
+						}	
 					</Container>
 				</Col>
-				<Col xl={4} lg={4} md={4} className="bd-callout bd-callout-info">
-					{ selectedFile.id === null ? <i>Select file</i> : 
+				<Col xl={4} lg={4} md={4} className="separator">
+					{ selectedFile._id === null ? <i>Select file</i> : 
 						<>					
-							<CopiesHandler file={selectedFile.id} name={selectedFile.name} />
+							<CopiesHandler file={selectedFile} />
 						</>
 					}
 				</Col>

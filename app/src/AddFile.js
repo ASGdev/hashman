@@ -93,7 +93,7 @@ function AddFile(props) {
 					<LocationForm onChange={handleLocationChange} />
 					
 					<Form.Group controlId="fileUri">
-						<Form.Label>URI</Form.Label>
+						<Form.Label>URI / Path</Form.Label>
 						<Form.Control type="text" placeholder="URI" value={newFile.uri} onChange={(e) => handlePropertyChange("uri", e.target.value)} />
 					</Form.Group>
 					

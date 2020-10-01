@@ -20,6 +20,22 @@ router.get('/', async function(req, res) {
 		}
 	  });
 });
+
+router.get('/:id', async function (req, res) {
+	Location.findOne({ _id: req.params.id }, function (err, location) {
+		if (err) {
+			console.error(err);
+			res.status(500)
+				.json({
+					error: 'Internal error please try again'
+				});
+		} else if (!location) {
+			res.json({})
+		} else {
+			res.json(location);
+		}
+	});
+})
 	
 router.post('/', async function (req, res) {
 	console.log(req.body)
@@ -38,18 +54,18 @@ router.post('/', async function (req, res) {
 	});
 })
 
-router.put('/:id/description', async function (req, res) {
-	Location.updateOne({ _id : req.params.id }, { $set: { description: req.body.description } }, function(err, project) {
+router.put('/:id', async function (req, res) {
+	Location.updateOne({ _id: req.params.id }, { $set: req.body }, function (err, location) {
 		if (err) {
-		  console.error(err);
-		  res.status(500)
-			.json({
-			error: 'Internal error please try again'
-		  });
-		} else if (!project) {
+			console.error(err);
+			res.status(500)
+				.json({
+					error: 'Internal error please try again'
+				});
+		} else if (!location) {
 			res.json({})
 		} else {
-			res.json(project);
+			res.json(location);
 		}
 	});
 })

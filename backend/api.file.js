@@ -64,6 +64,7 @@ router.post('/', async function (req, res) {
 	f.original.hash = req.body.hash
 	f.original.creationDate = req.body.creationDate
 	f.original.locationId = req.body.locationId
+	f.original.path = req.body.path || null
 	
 	console.log(f)
 	
@@ -100,6 +101,24 @@ router.post('/:id/copy', async function (req, res) {
 			res.json(project);
 		}
 	  });
+})
+
+router.put('/:id', async function (req, res) {
+	let f = { "original.description": Object.values(req.body)[0] }
+
+	File.updateOne({ _id: req.params.id }, { $set: f}, function (err, project) {
+		if (err) {
+			console.error(err);
+			res.status(500)
+				.json({
+					error: 'Internal error please try again'
+				});
+		} else if (!project) {
+			res.json({})
+		} else {
+			res.json(project);
+		}
+	});
 })
 
 router.delete('/:id', async function (req, res) {

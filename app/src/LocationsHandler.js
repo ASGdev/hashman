@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import EditLocation from './EditLocation'
 
 function submit(){
 	let formData = new FormData();
@@ -86,10 +87,13 @@ function LocationsHandler() {
 							<Card.Body>
 							  <Card.Title>{location.name}</Card.Title>
 							  <Card.Text>
-							  { location.description }
+									<small class="text-muted">Description</small>
+									&nbsp; {location.description ? location.description : <i>No description</i>}
 							  </Card.Text>
 							</Card.Body>
 							<Card.Footer className="text-muted">
+								<EditLocation id={location._id} />
+								{' '}
 								<Button variant="outline-danger" onClick={(e) => handleDeleteLocation(e, location._id)}>Delete</Button>
 							</Card.Footer>
 						</Card>

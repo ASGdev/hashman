@@ -95,3 +95,22 @@
 .bd-callout-danger h4 {
     color: #d9534f
 }
+
+.separator {
+  border-left: 2px solid #dee2e6;
+}
+
+.copyPropertyAction {
+  display: none;
+}
+.copyProperty:hover div {
+	display: block; 
+}
+
+.filterContainer li {
+	cursor: pointer;
+}
+	
+.selectedFilter {
+	color: #007bff;
+}

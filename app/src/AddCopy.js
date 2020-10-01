@@ -75,7 +75,7 @@ function AddCopy(props) {
 					</Form.Group>
 					
 					<Form.Group controlId="formBasicEmz">
-						<Form.Label>URI</Form.Label>
+						<Form.Label>URI / Path</Form.Label>
 						<Form.Control type="text" placeholder="URI" value={newCopy.uri} onChange={(e) => handlePropertyChange("uri", e.target.value)} />
 					</Form.Group>
 					

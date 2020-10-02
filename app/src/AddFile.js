@@ -37,7 +37,7 @@ function AddFile(props) {
 		console.log("Submitting...")
 		console.log(newFile)
 		
-		fetch('http://localhost:8080/api/file/', {
+		fetch('/api/file/', {
 			method: 'POST',
 			body: JSON.stringify(newFile),
 			 headers: {

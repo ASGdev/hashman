@@ -9,12 +9,12 @@ function AdminHandler() {
 			locations: []
 		}
 		
-		let filesQuery = await fetch('http://localhost:8080/api/file');
+		let filesQuery = await fetch('/api/file');
 		let filesData = await filesQuery.json()
 		
 		combined.files = filesData;
 		
-		let locationsQuery = await fetch('http://localhost:8080/api/location');
+		let locationsQuery = await fetch('/api/location');
 		let locationsData = await locationsQuery.json()
 		
 		combined.locations = locationsData

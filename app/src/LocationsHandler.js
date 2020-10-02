@@ -9,28 +9,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import EditLocation from './EditLocation'
 
-function submit(){
-	let formData = new FormData();
-	formData.append('user', this.state.newUser);
-    fetch('project/' + this.props.pid + '/settings/access', {
-		method: 'POST',
-		body: formData
-    })
-    .then(res => {
-      if (res.status === 200) {
-		this.setState({ newUser: ""})
-		this.fetch()
-      } else {
-        const error = new Error(res.error);
-        throw error;
-      }
-    })
-    .catch(err => {
-      console.error(err);
-    });
-}
-
-
 function LocationsHandler() {
 	const [locations, setLocations] = useState([]);
 	
@@ -39,7 +17,7 @@ function LocationsHandler() {
 	}, [])
 	
 	const fetchLocations = () => {
-		fetch('http://localhost:8080/api/location/')
+		fetch('/api/location/')
 		  .then(res => {
 			  return res.json()
 		  })
@@ -50,7 +28,7 @@ function LocationsHandler() {
 	
 	const handleDeleteLocation = (e, id) => {
 		e.stopPropagation()
-		fetch('http://localhost:8080/api/location/' + id, {
+		fetch('/api/location/' + id, {
 			method: 'DELETE',
 			headers: {
 				'Accept': 'application/json',

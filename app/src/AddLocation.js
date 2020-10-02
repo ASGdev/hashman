@@ -24,7 +24,7 @@ function AddLocation(props) {
 	};
 	
 	const handleSubmit = () => {
-		fetch('http://localhost:8080/api/location/', {
+		fetch('/api/location/', {
 			method: 'POST',
 			body: JSON.stringify(newLocation),
 			 headers: {

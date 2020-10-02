@@ -5,6 +5,11 @@ const fs = require('fs')
 const _ = require('lodash')
 const File = require('./models/File');
 const Location = require('./models/Location');
+const withAuthOrKey = require('./withAuthOrKey');
+
+router.use(async function (req, res, next) {
+	withAuthOrKey(req, res, next)
+})
 
 router.get('/', async function(req, res) {
 	File.find({}, 'original', async function(err, files) {

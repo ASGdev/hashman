@@ -25,7 +25,7 @@ function EditLocation(props) {
 
 	useEffect(() => {
 		console.log("Fetching data for edition")
-		fetch('http://localhost:8080/api/location/' + props.id)
+		fetch('/api/location/' + props.id)
 			.then(res => {
 				return res.json()
 			})
@@ -35,7 +35,7 @@ function EditLocation(props) {
 	}, [])
 	
 	const handleSubmit = () => {
-		fetch('http://localhost:8080/api/location/' + props.id, {
+		fetch('/api/location/' + props.id, {
 			method: 'PUT',
 			body: JSON.stringify(location),
 			 headers: {

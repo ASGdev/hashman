@@ -33,7 +33,7 @@ function AddCopy(props) {
 	};
 	
 	const handleSubmit = () => {
-		fetch('http://localhost:8080/api/file/' + props.file + '/copy', {
+		fetch('/api/file/' + props.file + '/copy', {
 			method: 'POST',
 			body: JSON.stringify(newCopy),
 			 headers: {

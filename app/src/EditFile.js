@@ -16,7 +16,7 @@ function EditFile(props) {
 		let update = {}
 		update[props.field] = newValue
 
-		fetch('http://localhost:8080/api/file/' + props.id, {
+		fetch('/api/file/' + props.id, {
 			method: 'PUT',
 			body: JSON.stringify(update),
 			 headers: {

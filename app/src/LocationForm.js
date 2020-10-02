@@ -17,7 +17,7 @@ function LocationForm(props) {
 	};
 	
 	useEffect(() => {
-		fetch('http://localhost:8080/api/location')
+		fetch('/api/location')
 		  .then(res => {
 			  return res.json()
 		  })

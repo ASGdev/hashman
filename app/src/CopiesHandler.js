@@ -33,7 +33,7 @@ function CopiesHandler(props) {
 	
 	const fetchCopies = () => {
 		console.log("fetching copies");
-		fetch('http://localhost:8080/api/file/' + props.file._id + '/copies')
+		fetch('/api/file/' + props.file._id + '/copies')
 		  .then(res => {
 			  return res.json()
 		  })
@@ -48,7 +48,7 @@ function CopiesHandler(props) {
 	
 	const handleDeleteCopy = (e, id) => {
 		e.stopPropagation()
-		fetch('http://localhost:8080/api/file/' + props.file._id + '/copy/' + id, {
+		fetch('/api/file/' + props.file._id + '/copy/' + id, {
 			method: 'DELETE',
 			headers: {
 				'Accept': 'application/json',

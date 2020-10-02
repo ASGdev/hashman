@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import CopiesHandler from './CopiesHandler'
 import NameFilter from './NameFilter'
+import Cookies from 'js-cookie';
 
 function Hashes(props){
 		console.log(props.data)
@@ -48,7 +49,7 @@ function FilesHandler() {
 	}
 	
 	const fetchFiles = () => {
-		fetch('http://localhost:8080/api/file/')
+		fetch('/api/file/')
 		  .then(res => {
 			  return res.json()
 		  })
@@ -60,7 +61,7 @@ function FilesHandler() {
 	
 	const handleDeleteFile = (e, id) => {
 		e.stopPropagation()
-		fetch('http://localhost:8080/api/file/' + id, {
+		fetch('/api/file/' + id, {
 			method: 'DELETE',
 			headers: {
 				'Accept': 'application/json',

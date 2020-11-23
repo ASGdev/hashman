@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 let locationApi = require('./api.location');
 let fileApi = require('./api.file');
+let directoryApi = require('./api.directory');
 let auth = require('./auth');
 
 const app = express();
@@ -13,10 +14,11 @@ const app = express();
 const secret = 'mysecretsshhh';
 
 app.use(cors())
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '500mb'}));
 app.use(cookieParser());
 app.use("/api/location", locationApi);
 app.use("/api/file", fileApi);
+app.use("/api/directory", directoryApi);
 app.use("/auth", auth);
 
 const mongo_uri = 'mongodb://localhost/hashman';

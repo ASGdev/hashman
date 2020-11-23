@@ -64,12 +64,13 @@ router.post('/', async function (req, res) {
 	console.log("new file")
 	console.log(req.body)
 	let f = new File()
-	f.original.name = req.body.name
-	f.original.size = req.body.size
-	f.original.hash = req.body.hash
-	f.original.creationDate = req.body.creationDate
-	f.original.locationId = req.body.locationId
-	f.original.path = req.body.path || null
+	f.original.name = req.body.n
+	f.original.size = req.body.s
+	f.original.hash = req.body.h
+	f.original.creationDate = req.body.cd
+	f.original.locationId = req.body.li
+	f.original.locationName = req.body.ln || null
+	f.original.path = req.body.p || null
 	
 	console.log(f)
 	

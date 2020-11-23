@@ -33,8 +33,8 @@ function Hashes(props){
 		}
 }
 
-function FilesHandler() {
-	const [files, setFiles] = useState([]);
+function DirectoriesHandler() {
+	const [directories, setDirectories] = useState([]);
 	const [refreshData, setRefreshData] = useState(true)
 	const [selectedFile, setSelectedFile] = useState({_id: null})
 	const [filterValue, setFilterValue] = useState(null)
@@ -43,7 +43,7 @@ function FilesHandler() {
 	
 	useEffect(() => {
 		if(refreshData){
-			fetchFiles()
+			fetchDirectories()
 		}
 	}, [])
 	
@@ -51,13 +51,13 @@ function FilesHandler() {
 		setSelectedFile(file);		
 	}
 	
-	const fetchFiles = () => {
-		fetch('/api/file/')
+	const fetchDirectories = () => {
+		fetch('/api/directory/')
 		  .then(res => {
 			  return res.json()
 		  })
 		  .then(data => {
-			  setFiles(data)
+			  setDirectories(data)
 			  setRefreshData(false)
 		  })
 	}
@@ -74,7 +74,7 @@ function FilesHandler() {
 		.then(res => {
 		  if (res.status === 200) {
 			setSelectedFile({ _id: null });
-			fetchFiles()
+			fetchDirectories()
 		  } else {
 		  }
 		})
@@ -107,8 +107,7 @@ function FilesHandler() {
 		<Container fluid className="p-3">
 			<Row>
 				<Col className="d-inline-flex p-2">
-					<h3>Files</h3>&nbsp;
-					<AddFile onSuccess={() => fetchFiles()}/>
+					<h3>Directories</h3>
 				</Col>
 			</Row>
 
@@ -121,29 +120,31 @@ function FilesHandler() {
 				</Col>
 			</Row>
 			
-			{ files.length === 0 ? <i>No files.</i> : <></> }
+			{ directories.length === 0 ? <i>No directories.</i> : <></> }
 			  <Row>
 				<Col>
 					<Container className="d-flex flex-wrap">
 					{ (isListView) ?
 						(filterValue === null) ?
-							<FileListView files={files} filter={filterValue} />
-							: <FileListView files={files} filter={filterValue} />
+							<FileListView files={directories} filter={filterValue} />
+							: <FileListView files={directories} filter={filterValue} />
 						:
-						files.map(file => {
+						directories.map(file => {
 							if(filterValue === null || filterValue.test(file.original.name)){	
 								return (	
 										<Card key={file._id} onClick={() => handleSelectCard(file)} className={file._id === selectedFile._id ? "border border-primary m-2 hoverable" : "m-2 hoverable"}>
 											<Card.Body>
 												<Card.Title>{file.original.name}</Card.Title>
 												<Card.Subtitle className="mb-2">
-													{new Date(file.original.creationDate).toUTCString()} &sdot; {file.original.location}
+													{new Date(file.original.postDate).toUTCString()} &sdot; {file.original.locationName}
 												</Card.Subtitle>
 												<Card.Text>
-													<Hashes data={file.original} />
+													<p>Size : {file.original.size}</p>
+													<p>Description : {file.original.description}</p>
 												</Card.Text>
 											</Card.Body>
 											<Card.Footer className="text-muted">
+												<Button variant="outline">View content</Button>
 												<Button variant="outline-danger" onClick={(e) => handleDeleteFile(e, file._id)}>Delete</Button>
 											</Card.Footer>
 										</Card>
@@ -165,4 +166,4 @@ function FilesHandler() {
 	);
 }
 
-export default FilesHandler;
+export default DirectoriesHandler;

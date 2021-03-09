@@ -12,31 +12,60 @@ router.use(async function (req, res, next) {
 })
 
 router.get('/', async function(req, res) {
-	File.find({}, 'original', async function(err, files) {
-		if (err) {
-		  console.error(err);
-		  res.status(500)
-			.json({
-			error: 'Internal error please try again'
-		  });
-		} else if (!files) {
-			res.json({})
+	if(req.query['q'] && req.query['h'] && req.query['s']){
+		console.log("searching")
+		console.log(req.query)
+		
+		if(req.query['h'] === "true"){
+			console.log("searching by hash")
+			
+			const listing = await File.find({ 'original.hash.value': req.query['q'] }).exec()
+			
+			res.json(listing)
+			
 		} else {
-			// map locationId with location name
-			console.log(files)
-			for (let index = 0; index < files.length; index++) {
-				files[index] = files[index].toObject();
-				if(files[index].original.locationId){
-					let name = await Location.findOne({ _id: files[index].original.locationId }, 'name');
-					if(name){
-						files[index].original.location = name.name
-					}
-				}
+			if(req.query['s'] === "true"){
+				console.log("strict search")
 				
+				const listing = await File.find({ 'original.name': req.query['q'] }).exec()
+				
+				res.json(listing)
+			} else {
+				console.log("no strict search")
+				
+				const listing = await File.find({ 'original.name': new RegExp(req.query['q']) }).exec()
+				
+				res.json(listing)
 			}
-			res.json(files);
 		}
-	  });
+		
+	} else {
+		File.find({ 'original.directoryId': null }, 'original', async function(err, files) {
+			if (err) {
+			  console.error(err);
+			  res.status(500)
+				.json({
+				error: 'Internal error please try again'
+			  });
+			} else if (!files) {
+				res.json({})
+			} else {
+				// map locationId with location name
+				console.log(files)
+				for (let index = 0; index < files.length; index++) {
+					files[index] = files[index].toObject();
+					if(files[index].original.locationId){
+						let name = await Location.findOne({ _id: files[index].original.locationId }, 'name');
+						if(name){
+							files[index].original.location = name.name
+						}
+					}
+					
+				}
+				res.json(files);
+			}
+		});
+	}
 });
 		
 router.get('/:id/copies', function(req, res) {
@@ -71,6 +100,7 @@ router.post('/', async function (req, res) {
 	f.original.locationId = req.body.li
 	f.original.locationName = req.body.ln || null
 	f.original.path = req.body.p || null
+	f.original.description = req.body.de || null
 	
 	console.log(f)
 	

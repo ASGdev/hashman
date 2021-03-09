@@ -10,7 +10,9 @@ const FileSchema = new mongoose.Schema({
 		locationId: { type: String },
 		locationName: { type: String },
 		description: { type: String },
-		path: { type: String }
+		path: { type: String },
+		directoryId: { type: String, default: null },
+		directoryName: { type: String, default: null }
 	},
 	copies : [{
 		hash: [{ type: { type: String }, value: { type: String } }],

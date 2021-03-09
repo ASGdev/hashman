@@ -9,6 +9,7 @@ import FilesHandler from './FilesHandler'
 import AdminHandler from './AdminHandler'
 import DirectoriesHandler from './DirectoriesHandler'
 import CompareHandler from './CompareHandler'
+import Search from './Search'
 import {
   BrowserRouter as Router,
   Switch,
@@ -31,6 +32,9 @@ function Hashman() {
 				</Tab>
 				<Tab eventKey="locations" title="Locations">
 					<LocationsHandler />
+				</Tab>
+				<Tab eventKey="search" title="Search">
+					<Search />
 				</Tab>
 				<Tab eventKey="compare" title="Compare">
 					<CompareHandler />

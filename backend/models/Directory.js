@@ -4,13 +4,7 @@ const DirectorySchema = new mongoose.Schema({
 	original : { 
 		name: { type: String },
 		size: { type: Number },
-		content: [{
-			path: { type: String },
-			name: { type: String },
-			size: { type: Number },
-			creationDate: { type: Date },
-			hash: {}
-		}],
+		content: [],
 		creationDate: { type: Date },
 		postDate: { type: Date, default: Date.now },
 		tags: [{ type: String }],
